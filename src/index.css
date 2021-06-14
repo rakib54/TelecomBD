@@ -102,6 +102,18 @@
   }
 }
 
+.google-btn button {
+  text-decoration: none;
+  border: 1px solid grey;
+  border-radius: 15px;
+  width: 300px;
+  height: 40px;
+  background-color: rgb(202, 76, 54);
+  color: white;
+  font-weight: 500;
+  
+
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

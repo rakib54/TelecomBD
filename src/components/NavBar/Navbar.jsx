@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { UserContext } from '../../App';
+import { auth } from '../Login/firebase.config';
 
 const Navbar = () => {
+    const [loggedInUser, setLoggedInUser] = useContext(UserContext)
+
+    const signOut = () => {
+        auth.signOut()
+        .then(() =>{
+            setLoggedInUser(null)
+        })
+        .catch((error) => console.log(error))
+       
+    }
+
     return (
         <>
             <div className="container-fluid">
@@ -27,6 +40,15 @@ const Navbar = () => {
                                         <li className="nav-item">
                                             <NavLink activeClassName="menu-active" to="/contact" className="nav-link">Contact</NavLink>
                                         </li>
+                                        {
+                                            loggedInUser.email ? <li className="nav-item">
+                                                <NavLink onClick={signOut} activeClassName="menu-active" to="/login" className="nav-link">Logout</NavLink>
+                                            </li>
+                                                :
+                                                <li className="nav-item">
+                                                    <NavLink activeClassName="menu-active" to="/login" className="nav-link">Login</NavLink>
+                                                </li>
+                                        }
                                     </ul>
                                 </div>
                             </div>
