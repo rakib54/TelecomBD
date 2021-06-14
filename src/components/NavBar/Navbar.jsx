@@ -9,7 +9,7 @@ const Navbar = () => {
     const signOut = () => {
         auth.signOut()
         .then(() =>{
-            setLoggedInUser(null)
+            setLoggedInUser("")
         })
         .catch((error) => console.log(error))
        

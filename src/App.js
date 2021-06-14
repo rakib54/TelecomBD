@@ -14,6 +14,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import { createContext, useState } from 'react';
+import Footer from './components/Footer/Footer.jsx';
 
 export const UserContext = createContext()
 
@@ -31,7 +32,9 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Redirect to="/" />
         </Switch>
+        
       </Router>
+      <Footer />
     </UserContext.Provider>
   );
 }

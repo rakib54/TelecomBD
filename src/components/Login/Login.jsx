@@ -13,26 +13,37 @@ const Login = () => {
     const [user, setUser] = useState({
         fullName: "",
         email: "",
-        password: ""
+        password: "",
+        confirmPassword:""
     })
     console.log(user);
 
 
-    const handleSignIn = () => {
-        auth.createUserWithEmailAndPassword(user.email, user.password)
-            .then((authuser) => {
-                authuser.user.updateProfile({
-                    displayName: user.fullName
-                })
+    const handleCreateUser = () => {
+        if(user.password === user.confirmPassword){
+            auth.createUserWithEmailAndPassword(user.email, user.password)
+            .then((result) => {
+                const user = result.user
+                setLoggedInUser(user)
+                history.push('/')
             })
             .catch((err) => alert(err.message))
-        if (user.email && user.password) {
-            auth.signInWithEmailAndPassword(user.email, user.password)
-                .then((res) => {
-                    const newUser = { ...user }
-                })
-                .catch((err) => alert(err.message))
         }
+        else{
+            alert("Password not matched")
+        }
+       
+    }
+
+    const handleSignIn = () => {
+        auth.signInWithEmailAndPassword(user.email, user.password)
+        .then((res) => {
+            const user = res.user;
+            setLoggedInUser(user);
+            history.push("/")
+        })
+        .catch((err) => alert(err.message))
+
     }
 
     const handleChange = (e) => {
@@ -66,7 +77,6 @@ const Login = () => {
                 console.log(errorMessage);
 
             });
-
     }
 
     return (
@@ -97,12 +107,16 @@ const Login = () => {
                                 isSignUp &&
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label"><b>Confirm Password</b></label>
-                                    <input name="confirmPassword" value={user.password} onChange={handleChange} required type="password" className="form-control" id="example" placeholder="Confirm Password" />
+                                    <input name="confirmPassword" value={user.confirmPassword} onChange={handleChange} required type="password" className="form-control" id="example" placeholder="Confirm Password" />
                                 </div>
                             }
 
                             <div className="col-12 d-flex justify-content-between align-items-center ">
-                                <button onClick={handleSignIn} className={isSignUp ? "btn btn-primary" : "btn btn-success"} type="submit">{isSignUp ? 'Register' : 'Login'}</button>
+                                {
+                                    isSignUp ? 
+                                    <button onClick={handleCreateUser} className="btn btn-primary" type="submit">Register</button>:
+                                    <button onClick={handleSignIn} className="btn btn-success" type="submit">Login</button>
+                                }
                                 <Link onClick={SwitchMode} >{isSignUp ? 'Already have an account? sign In ' : "Don't have an account ? Register"}</Link>
                             </div>
                         </form>

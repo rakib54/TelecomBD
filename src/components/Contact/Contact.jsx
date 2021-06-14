@@ -12,18 +12,27 @@ const Contact = () => {
     const InputEvent = (e) => {
         const { name, value } = e.target;
 
-        setData((preVal) =>{
+        setData((preVal) => {
             return {
                 ...preVal,
-                [name] : value 
+                [name]: value
             }
         })
     }
 
     const formSubmit = (e) => {
         e.preventDefault()
-        console.log(e.target.value);
+        alert("Your Response is recorded")
+        
+        setData({
+            fullName: "",
+            phone: "",
+            email: "",
+            message: ""
+        })
+
     }
+
 
     return (
         <>
