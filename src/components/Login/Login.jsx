@@ -7,42 +7,44 @@ import { UserContext } from '../../App';
 
 
 const Login = () => {
-    const [loggedInUser, setLoggedInUser] = useContext(UserContext)
+    const [LoggedInUser, setLoggedInUser] = useContext(UserContext)
     let history = useHistory()
     const [isSignUp, setIsSignUp] = useState(false)
     const [user, setUser] = useState({
         fullName: "",
         email: "",
         password: "",
-        confirmPassword:""
+        confirmPassword: ""
     })
-    console.log(user);
-
 
     const handleCreateUser = () => {
-        if(user.password === user.confirmPassword){
+        if (user.password === user.confirmPassword) {
             auth.createUserWithEmailAndPassword(user.email, user.password)
-            .then((result) => {
-                const user = result.user
-                setLoggedInUser(user)
-                history.push('/')
-            })
-            .catch((err) => alert(err.message))
+                .then((result) => {
+                    result.user.updateProfile({
+                        displayName: user.fullName
+                    })
+                    setLoggedInUser(result.user)
+                    history.push('/')
+                })
+                .catch((err) => alert(err.message))
         }
-        else{
+        else {
             alert("Password not matched")
         }
-       
+
     }
 
     const handleSignIn = () => {
         auth.signInWithEmailAndPassword(user.email, user.password)
-        .then((res) => {
-            const user = res.user;
-            setLoggedInUser(user);
-            history.push("/")
-        })
-        .catch((err) => alert(err.message))
+            .then((res) => {
+                const user = res.user;
+                setUserToken()
+                setLoggedInUser(user);
+                
+                history.push("/")
+            })
+            .catch((err) => alert(err.message))
 
     }
 
@@ -69,15 +71,27 @@ const Login = () => {
             .then((result) => {
                 const user = result.user;
                 console.log(user);
-                setLoggedInUser(user);
+                setUserToken()
+                setLoggedInUser(user);                
                 history.push('/')
 
             }).catch((error) => {
                 var errorMessage = error.message;
                 console.log(errorMessage);
 
-            });
+            });       
     }
+
+    const setUserToken = () =>{
+        auth.currentUser.getIdToken( true)
+        .then(function(idToken) {
+          sessionStorage.setItem('token',idToken)
+          console.log(idToken);
+        }).catch(function(error) {
+            console.log(error.message);
+        });
+       }
+    
 
     return (
         <>
@@ -113,9 +127,9 @@ const Login = () => {
 
                             <div className="col-12 d-flex justify-content-between align-items-center ">
                                 {
-                                    isSignUp ? 
-                                    <button onClick={handleCreateUser} className="btn btn-primary" type="submit">Register</button>:
-                                    <button onClick={handleSignIn} className="btn btn-success" type="submit">Login</button>
+                                    isSignUp ?
+                                        <button onClick={handleCreateUser} className="btn btn-primary" type="submit">Register</button> :
+                                        <button onClick={handleSignIn} className="btn btn-success" type="submit">Login</button>
                                 }
                                 <Link onClick={SwitchMode} >{isSignUp ? 'Already have an account? sign In ' : "Don't have an account ? Register"}</Link>
                             </div>
