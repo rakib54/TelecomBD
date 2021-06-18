@@ -2,8 +2,8 @@ import React from 'react';
 import Card from './Card';
 // import shopData from '../FakeData/ShopData.jsx'
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { removeFromCart } from '../../redux/actions/shopAction';
+import { loadProducts, removeFromCart } from '../../redux/actions/shopAction';
+import { useEffect } from 'react';
 
 const Service = () => {
     const shopData = useSelector((state) => {
@@ -14,6 +14,11 @@ const Service = () => {
     })
 
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(loadProducts())
+    },[])
+
     return (
         <>
             <div className="my-3">
@@ -24,7 +29,7 @@ const Service = () => {
                     <div className="col-10 mx-auto">
                         {
                              addProduct.map((data) => (
-                                <div className="col-4 card">
+                                <div key={data.id} className="col-4 card">
                                     {/* <img style={{ height: 280 }} src={data.image} className="card-img-top" alt="" /> */}
                                     <div className="card-body">
                                         <h5 className="card-title">{data.title}</h5>
@@ -39,7 +44,7 @@ const Service = () => {
                         }
                         <div className="row gy-4">
                             {
-                                shopData.map((data) => <Card data={data} key={data.id} />)
+                                shopData?.map((data) => <Card data={data} key={data.id} />)
                             }
                         </div>
                     </div>

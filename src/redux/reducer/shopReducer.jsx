@@ -1,7 +1,7 @@
-import data from "../../components/FakeData/ShopData"
+// import data from "../../components/FakeData/ShopData"
 
 const initialState = {
-    allProducts: data,
+    allProducts:[],
     addProduct: [],
     removeProduct: []
 }
@@ -9,19 +9,26 @@ const initialState = {
 const productReducer = (state = initialState, action) => {
 
     switch (action.type) {
+        case "LOAD_PRODUCTS": {
+            const newState = { 
+                ...state,
+                allProducts: action.payload
+            }
+            return newState
+        }
         case "ADD_TO_CART": {
             const newState = {
                 ...state,
-                addProduct: [...state.addProduct,action.payload]
+                addProduct: [...state.addProduct, action.payload]
             }
-            return newState  
+            return newState
         }
         case "REMOVE_FROM_CART": {
             const newState = {
                 ...state,
                 removeProduct: state.addProduct.filter((p) => p.id !== action.payload)
             }
-            return newState 
+            return newState
         }
         default: {
             return state
